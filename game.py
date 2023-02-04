@@ -27,13 +27,21 @@ class GamePrinter:
                     colour = BLACK2
                 draw.rect(self.window, colour, rectangle)
 
-    def draw_score(self, snake):
-        text = f"Score: {snake.length}"
+    def _draw_text(self, text, percent: float):
+        # percent 0.5 means center 0.25 means left quarter etc
         img_font = FONT.render(text, True, WHITE)
         font_width, _ = FONT.size(text)
-        width = self.window.get_width()
-        # center
-        x = (width//2)-(font_width//2)
-        # center of the right half
-        x = x//2
+        font_width = font_width * percent
+        width = self.window.get_width() * percent
+        x = width - font_width
         self.window.blit(img_font, (x, 15))
+
+    def draw_score(self, snake):
+        text = f"Score: {snake.length}"
+        self._draw_text(text, 0.25)
+
+    def draw_time(self, num_of_seconds):
+        min = num_of_seconds // 60
+        sec = num_of_seconds - (60 * min)
+        text = f"Time {min:02}:{sec:02}"
+        self._draw_text(text, 0.75)
