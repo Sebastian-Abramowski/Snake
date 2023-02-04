@@ -2,6 +2,8 @@ import pygame
 from constants import FPS, MIN_WIDTH, MIN_HEIGHT
 from constants import BLACK3
 from board import Board
+from game import Game
+from snake import Snake
 
 pygame.init()
 pygame.display.set_caption("Snake")
@@ -12,7 +14,10 @@ play = True
 while play:
     clock.tick(FPS)
     window.fill(BLACK3)
+
     board = Board(window)
+    snake = Snake()
+    snake_game = Game(window, board, snake)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -27,7 +32,8 @@ while play:
             window = pygame.display.set_mode(
                 (width, height), pygame.RESIZABLE)
 
-    board.draw_small_rectangles()
+    snake_game.printer.draw_rectangles()
+    snake_game.printer.draw_score(snake)
 
     pygame.display.update()
 

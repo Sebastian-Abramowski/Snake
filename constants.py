@@ -15,7 +15,8 @@ GREEN = (31, 97, 52)
 MIN_WIDTH = 500
 MIN_HEIGHT = 500
 PADDING = 50
-SQUARE_SIZE = 20
+SQUARE_SIZE = 30
 
+# Font
 font.init()
 FONT = font.SysFont('calibri', 20, True)
