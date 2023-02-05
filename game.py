@@ -1,21 +1,42 @@
 from snake import Snake
 from constants import BLACK1, BLACK2, FONT
-from constants import WHITE
+from constants import WHITE, GREEN
 from pygame import draw
 from other import take_best_score
 
 
 class Game:
     def __init__(self, window, board, snake):
-        self.printer = GamePrinter(window, board)
+        self.game_logic = GameLogic(board, snake)
+        self.printer = GamePrinter(window, board, self.game_logic)
+        self.board = board
         self.window = window
         self.snake = snake
 
+    def move_snake(self, where):
+        # where = 'up' / 'left' / 'right' / 'down'
+        i, j = self.snake.head
+        if where == 'up':
+            i -= 1
+        elif where == 'down':
+            i += 1
+        elif where == 'right':
+            j += 1
+        elif where == 'left':
+            j -= 1
+        cond1 = (i <= len(self.board.rectangles) - 1)
+        cond2 = (j <= len(self.board.rectangles[0]) - 1)
+        if i >= 0 and j >= 0:
+            if cond1 and cond2:
+                self.snake.head = (i, j)
+                self.snake.rectangles_taken.append(self.board.rectangles[i][j])
+
 
 class GamePrinter:
-    def __init__(self, window, board):
+    def __init__(self, window, board, logic):
         self.window = window
         self.board = board
+        self.game_logic = logic
 
     def draw_rectangles(self):
         for num_of_row, row in enumerate(self.board.rectangles):
@@ -55,3 +76,22 @@ class GamePrinter:
     def draw_best_score(self, file_path):
         text = str(take_best_score(file_path))
         self._draw_text_by_border(text, 125)
+
+    def draw_rectangles_taken(self):
+        for rectangle in self.game_logic.snake.rectangles_taken:
+            draw.rect(self.window, GREEN, rectangle)
+
+
+class GameLogic:
+    def __init__(self, board, snake):
+        self.board = board
+        self.snake = snake
+        snake.rectangles_taken = [self.starting_rectangle()]
+
+    def starting_rectangle(self):
+        index_i = len(self.board.rectangles) // 2
+        index_j = 2
+
+        # some restriction needed
+        self.snake.head = (index_i, index_j)
+        return self.board.rectangles[index_i][index_j]

@@ -58,3 +58,7 @@ class Board:
             rects.append(row_of_rects)
 
         return rects
+
+    def update_size(self):
+        self.centers_of_squares = self.calc_centers_of_squares()
+        self.rectangles = self.make_array_of_rectangles()

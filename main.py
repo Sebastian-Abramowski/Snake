@@ -1,6 +1,6 @@
 import pygame
 from constants import FPS, MIN_WIDTH, MIN_HEIGHT
-from constants import BLACK3, SOUND_EFFECTS
+from constants import BLACK3, SOUND_EFFECTS, ICON_SIZE
 from board import Board
 from game import Game
 from snake import Snake
@@ -22,7 +22,7 @@ pygame.mixer.music.load('Sound/old_snake_theme.wav')
 if SOUND_EFFECTS == 1:
     music = True
     pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.set_volume(0.1)
 
 play = True
 
@@ -44,12 +44,14 @@ while play:
         if event.type == pygame.QUIT:
             play = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_f:
-                music = False
-                pygame.mixer.music.fadeout(2000)
-            if event.key == pygame.K_g:
-                music = True
-                pygame.mixer.music.play(-1)
+            if event.key == pygame.K_UP:
+                snake_game.move_snake('up')
+            if event.key == pygame.K_DOWN:
+                snake_game.move_snake('down')
+            if event.key == pygame.K_RIGHT:
+                snake_game.move_snake('right')
+            if event.key == pygame.K_LEFT:
+                snake_game.move_snake('left')
         if event.type == pygame.VIDEORESIZE:
             width, height = event.size
             # setting the minimal screen size
@@ -59,11 +61,22 @@ while play:
                 height = MIN_HEIGHT
             window = pygame.display.set_mode(
                 (width, height), pygame.RESIZABLE)
-
+            board.update_size()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            if x <= ICON_SIZE[0]:
+                if y <= ICON_SIZE[1]:
+                    if music is True:
+                        music = False
+                        pygame.mixer.music.fadeout(2000)
+                    else:
+                        music = True
+                        pygame.mixer.music.play(-1)
     snake_game.printer.draw_rectangles()
     snake_game.printer.draw_score(snake)
     snake_game.printer.draw_time(seconds)
     snake_game.printer.draw_best_score("best_score.txt")
+    snake_game.printer.draw_rectangles_taken()
 
     music_icon(window, music)
     best_score_icon(window)
