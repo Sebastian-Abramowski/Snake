@@ -1,6 +1,6 @@
 
-☐ napraw za duże przerwy gdy ostatnia kolumna nie mam wystarczająco miejsca
-☐ snake nie może poruszac sie przez siebie
+✔ napraw za duże przerwy gdy ostatnia kolumna nie mam wystarczająco miejsca @done(23-02-05 18:16)
+✔ snake nie może poruszac sie przez siebie @done(23-02-05 18:21)
 ☐ snake jak poruszy się na ściane to jest koniec i na siebie też
 ☐ pojawiąjace się owoce
 ☐ snake nie zwiększa swojej dlugosci bez jedzenia

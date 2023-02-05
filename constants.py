@@ -1,4 +1,4 @@
-from pygame import font
+from pygame import font, image, transform
 
 FPS = 60
 
@@ -15,7 +15,7 @@ GREEN = (31, 97, 52)
 MIN_WIDTH = 780
 MIN_HEIGHT = 500
 PADDING = 50
-SQUARE_SIZE = 200
+SQUARE_SIZE = 100
 
 # Font
 font.init()

@@ -1,5 +1,5 @@
 import pygame
-from constants import FPS, MIN_WIDTH, MIN_HEIGHT
+from constants import FPS, MIN_WIDTH, MIN_HEIGHT, SQUARE_SIZE
 from constants import BLACK3, SOUND_EFFECTS, ICON_SIZE
 from board import Board
 from game import Game
@@ -23,6 +23,25 @@ if SOUND_EFFECTS == 1:
     music = True
     pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.1)
+
+# Images for sprites
+COLOUR_APPLE_IMG = pygame.image.load(
+        'Images/colourfull_apple.png').convert_alpha()
+COLOUR_APPLE_IMG = pygame.transform.scale(
+    COLOUR_APPLE_IMG, (SQUARE_SIZE, SQUARE_SIZE))
+BLACK_COLOUR_IMG = pygame.image.load(
+        'Images/black_apple.png').convert_alpha()
+BLACK_COLOUR_IMG = pygame.transform.scale(
+    BLACK_COLOUR_IMG, (SQUARE_SIZE, SQUARE_SIZE))
+GREEN_COLOUR_IMG = pygame.image.load(
+        'Images/green_apple.png').convert_alpha()
+GREEN_COLOUR_IMG = pygame.transform.scale(
+    GREEN_COLOUR_IMG, (SQUARE_SIZE, SQUARE_SIZE))
+YELLOW_COLOUR_IMG = pygame.image.load(
+        'Images/yellow_apple.png').convert_alpha()
+YELLOW_COLOUR_IMG = pygame.transform.scale(
+    YELLOW_COLOUR_IMG, (SQUARE_SIZE, SQUARE_SIZE))
+
 
 play = True
 
@@ -53,13 +72,13 @@ while play:
             play = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                snake_game.move_snake('up')
+                snake_game.snake.move_snake(board, 'up')
             if event.key == pygame.K_DOWN:
-                snake_game.move_snake('down')
+                snake_game.snake.move_snake(board, 'down')
             if event.key == pygame.K_RIGHT:
-                snake_game.move_snake('right')
+                snake_game.snake.move_snake(board, 'right')
             if event.key == pygame.K_LEFT:
-                snake_game.move_snake('left')
+                snake_game.snake.move_snake(board, 'left')
         if event.type == pygame.VIDEORESIZE:
             if snake_game.started is False:
                 width, height = event.size
@@ -90,6 +109,10 @@ while play:
 
     music_icon(window, music)
     best_score_icon(window)
+    # snake_game.printer.draw_sprite(YELLOW_COLOUR_IMG, (50, 50))
+    # snake_game.printer.draw_sprite(BLACK_COLOUR_IMG, (150, 150))
+    # snake_game.printer.draw_sprite(COLOUR_APPLE_IMG, (250, 250))
+    # snake_game.printer.draw_sprite(GREEN_COLOUR_IMG, (350, 350))
     pygame.display.update()
 
 pygame.quit()

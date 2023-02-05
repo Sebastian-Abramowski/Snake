@@ -1,4 +1,3 @@
-from snake import Snake
 from constants import BLACK1, BLACK2, FONT
 from constants import WHITE, GREEN
 from pygame import draw
@@ -13,25 +12,6 @@ class Game:
         self.board = board
         self.window = window
         self.snake = snake
-
-    def move_snake(self, where):
-        # where = 'up' / 'left' / 'right' / 'down'
-        i, j = self.snake.head
-        if where == 'up':
-            i -= 1
-        elif where == 'down':
-            i += 1
-        elif where == 'right':
-            j += 1
-        elif where == 'left':
-            j -= 1
-        cond1 = (i <= len(self.board.rectangles) - 1)
-        cond2 = (j <= len(self.board.rectangles[0]) - 1)
-        if i >= 0 and j >= 0:
-            if cond1 and cond2:
-                self.started = True
-                self.snake.head = (i, j)
-                self.snake.rectangles_taken.append(self.board.rectangles[i][j])
 
 
 class GamePrinter:
@@ -82,6 +62,9 @@ class GamePrinter:
     def draw_rectangles_taken(self):
         for rectangle in self.game_logic.snake.rectangles_taken:
             draw.rect(self.window, GREEN, rectangle)
+
+    def draw_sprite(self, img, possition):
+        self.window.blit(img, possition)
 
 
 class GameLogic:
