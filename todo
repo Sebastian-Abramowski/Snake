@@ -3,7 +3,7 @@
 ✔ snake nie może poruszac sie przez siebie @done(23-02-05 18:21)
 ☐ snake jak poruszy się na ściane to jest koniec i na siebie też
 ☐ pojawiąjace się owoce
-☐ snake nie zwiększa swojej dlugosci bez jedzenia
+✔ snake nie zwiększa swojej dlugosci bez jedzenia @done(23-02-05 20:55)
 ☐ na końcu jest koniec muzyki, jakiś efekt końcowy i zaczecie nowej rozgrywki na spację
 ☐ niebieskie jabłko x2 prędkosc
 ☐ czerwone jabłko + 1 dlugosc

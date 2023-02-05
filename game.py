@@ -55,7 +55,8 @@ class GamePrinter:
         self._draw_text(text, 0.75)
 
     def draw_best_score(self, file_path):
-        text = str(take_best_score(file_path))
+        best_score = self.game_logic.check_best_score(file_path)
+        text = str(best_score)
         self._draw_text_by_border(text, 125)
 
     def draw_rectangles_taken(self):
@@ -110,3 +111,10 @@ class GameLogic:
             y -= int(0.25 * SQUARE_SIZE)
         to_return.append((x, y))
         return to_return
+
+    def check_best_score(self, file_path):
+        best_score_acc_to_file = take_best_score(file_path)
+        best_score_maybe = self.snake.length
+        if best_score_maybe > best_score_acc_to_file:
+            return best_score_maybe
+        return best_score_acc_to_file

@@ -41,4 +41,6 @@ def take_best_score(txt_file_name):
         best_score = int(best_score)
     except Exception:
         best_score = 0
-    return best_score
+        with open(txt_file_name, 'w') as file_handle:
+            file_handle.write('0')
+    return int(best_score)
