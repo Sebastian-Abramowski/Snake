@@ -20,3 +20,7 @@ SQUARE_SIZE = 30
 # Font
 font.init()
 FONT = font.SysFont('calibri', 20, True)
+
+# Game
+SOUND_EFFECTS = 1
+ICON_SIZE = (40, 40)
