@@ -5,7 +5,7 @@ from board import Board
 from game import Game
 from snake import Snake
 from time import time
-from other import no_music_icon
+from other import music_icon, best_score_icon
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -63,8 +63,10 @@ while play:
     snake_game.printer.draw_rectangles()
     snake_game.printer.draw_score(snake)
     snake_game.printer.draw_time(seconds)
+    snake_game.printer.draw_best_score("best_score.txt")
 
-    no_music_icon(window, music)
+    music_icon(window, music)
+    best_score_icon(window)
     pygame.display.update()
 
 pygame.quit()

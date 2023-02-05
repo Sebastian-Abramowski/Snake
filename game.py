@@ -2,6 +2,7 @@ from snake import Snake
 from constants import BLACK1, BLACK2, FONT
 from constants import WHITE
 from pygame import draw
+from other import take_best_score
 
 
 class Game:
@@ -36,6 +37,11 @@ class GamePrinter:
         x = width - font_width
         self.window.blit(img_font, (x, 15))
 
+    def _draw_text_by_border(self, text, right_border):
+        # right border in pixels
+        img_font = FONT.render(text, True, WHITE)
+        self.window.blit(img_font, (right_border, 15))
+
     def draw_score(self, snake):
         text = f"Score: {snake.length}"
         self._draw_text(text, 0.25)
@@ -45,3 +51,7 @@ class GamePrinter:
         sec = num_of_seconds - (60 * min)
         text = f"Time {min:02}:{sec:02}"
         self._draw_text(text, 0.75)
+
+    def draw_best_score(self, file_path):
+        text = str(take_best_score(file_path))
+        self._draw_text_by_border(text, 125)
