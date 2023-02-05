@@ -1,12 +1,11 @@
 from constants import BLACK1, BLACK2, FONT
-from constants import WHITE, GREEN
+from constants import WHITE, GREEN, SQUARE_SIZE
 from pygame import draw
 from other import take_best_score
 
 
 class Game:
     def __init__(self, window, board, snake):
-        self.started = False
         self.game_logic = GameLogic(board, snake)
         self.printer = GamePrinter(window, board, self.game_logic)
         self.board = board
@@ -66,6 +65,11 @@ class GamePrinter:
     def draw_sprite(self, img, possition):
         self.window.blit(img, possition)
 
+    def draw_eyes_on_snakes(self):
+        radius = int(SQUARE_SIZE*0.1)
+        for poss_x, poss_y in self.game_logic.possition_of_eyes():
+            draw.circle(self.window, BLACK1, (poss_x, poss_y), radius)
+
 
 class GameLogic:
     def __init__(self, board, snake):
@@ -83,3 +87,26 @@ class GameLogic:
 
     def update_starting_point_before_start(self):
         self.snake.rectangles_taken = [self.starting_rectangle()]
+
+    def possition_of_eyes(self):
+        direction = self.snake.direction
+        currect_rect = self.snake.rectangles_taken[-1]
+
+        to_return = []
+        x, y = currect_rect.center
+        if direction in ['N', 'W']:
+            x -= int(0.25 * SQUARE_SIZE)
+            y -= int(0.25 * SQUARE_SIZE)
+        else:
+            x += int(0.25 * SQUARE_SIZE)
+            y += int(0.25 * SQUARE_SIZE)
+        to_return.append((x, y))
+        x, y = currect_rect.center
+        if direction in ['S', 'W']:
+            x -= int(0.25 * SQUARE_SIZE)
+            y += int(0.25 * SQUARE_SIZE)
+        else:
+            x += int(0.25 * SQUARE_SIZE)
+            y -= int(0.25 * SQUARE_SIZE)
+        to_return.append((x, y))
+        return to_return

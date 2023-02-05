@@ -56,7 +56,7 @@ while play:
 
     # turning off resizeability after moving the snake
     w, h = window.get_size()
-    if snake_game.started is True:
+    if snake_game.snake.moved is True:
         window = pygame.display.set_mode((w, h))
     else:
         window = pygame.display.set_mode((w, h), pygame.RESIZABLE)
@@ -72,13 +72,13 @@ while play:
             play = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                snake_game.snake.move_snake(board, 'up')
+                snake_game.snake.move_snake(board, 'N')
             if event.key == pygame.K_DOWN:
-                snake_game.snake.move_snake(board, 'down')
+                snake_game.snake.move_snake(board, 'S')
             if event.key == pygame.K_RIGHT:
-                snake_game.snake.move_snake(board, 'right')
+                snake_game.snake.move_snake(board, 'E')
             if event.key == pygame.K_LEFT:
-                snake_game.snake.move_snake(board, 'left')
+                snake_game.snake.move_snake(board, 'W')
         if event.type == pygame.VIDEORESIZE:
             if snake_game.started is False:
                 width, height = event.size
@@ -106,6 +106,7 @@ while play:
     snake_game.printer.draw_time(seconds)
     snake_game.printer.draw_best_score("best_score.txt")
     snake_game.printer.draw_rectangles_taken()
+    snake_game.printer.draw_eyes_on_snakes()
 
     music_icon(window, music)
     best_score_icon(window)

@@ -1,4 +1,4 @@
-from pygame import font, image, transform
+from pygame import font
 
 FPS = 60
 
