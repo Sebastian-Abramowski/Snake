@@ -34,6 +34,14 @@ last_time = time()
 seconds = 0
 while play:
     clock.tick(FPS)
+
+    # turning off resizeability after moving the snake
+    w, h = window.get_size()
+    if snake_game.started is True:
+        window = pygame.display.set_mode((w, h))
+    else:
+        window = pygame.display.set_mode((w, h), pygame.RESIZABLE)
+
     window.fill(BLACK3)
 
     if time() - last_time >= 1:
@@ -53,15 +61,17 @@ while play:
             if event.key == pygame.K_LEFT:
                 snake_game.move_snake('left')
         if event.type == pygame.VIDEORESIZE:
-            width, height = event.size
-            # setting the minimal screen size
-            if width < MIN_WIDTH:
-                width = MIN_WIDTH
-            if height < MIN_HEIGHT:
-                height = MIN_HEIGHT
-            window = pygame.display.set_mode(
-                (width, height), pygame.RESIZABLE)
-            board.update_size()
+            if snake_game.started is False:
+                width, height = event.size
+                # setting the minimal screen size
+                if width < MIN_WIDTH:
+                    width = MIN_WIDTH
+                if height < MIN_HEIGHT:
+                    height = MIN_HEIGHT
+                window = pygame.display.set_mode(
+                    (width, height), pygame.RESIZABLE)
+                board.update_size()
+                snake_game.game_logic.update_starting_point_before_start()
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
             if x <= ICON_SIZE[0]:

@@ -27,14 +27,18 @@ class Board:
         return how_many_horiz, how_many_vertic
 
     def calc_centers_of_squares(self):
+        w, h = self._possible_size_of_win()
+
         centers_of_squares = []
         half_of_square = self.square_size//2
-        y_point = PADDING + half_of_square
-
         num_of_squares_hori, num_of_squares_verti = self.calc_num_of_squares()
 
+        x_start_point = (w - (num_of_squares_hori * self.square_size)) // 2
+        y_start_point = (h - (num_of_squares_verti * self.square_size)) // 2
+        y_point = PADDING + y_start_point + half_of_square
+
         for _ in range(num_of_squares_verti):
-            x_point = PADDING + half_of_square
+            x_point = PADDING + x_start_point + half_of_square
             row = []
             for _ in range(num_of_squares_hori):
                 row.append((x_point, y_point))

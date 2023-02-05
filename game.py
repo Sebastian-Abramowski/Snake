@@ -7,6 +7,7 @@ from other import take_best_score
 
 class Game:
     def __init__(self, window, board, snake):
+        self.started = False
         self.game_logic = GameLogic(board, snake)
         self.printer = GamePrinter(window, board, self.game_logic)
         self.board = board
@@ -28,6 +29,7 @@ class Game:
         cond2 = (j <= len(self.board.rectangles[0]) - 1)
         if i >= 0 and j >= 0:
             if cond1 and cond2:
+                self.started = True
                 self.snake.head = (i, j)
                 self.snake.rectangles_taken.append(self.board.rectangles[i][j])
 
@@ -95,3 +97,6 @@ class GameLogic:
         # some restriction needed
         self.snake.head = (index_i, index_j)
         return self.board.rectangles[index_i][index_j]
+
+    def update_starting_point_before_start(self):
+        self.snake.rectangles_taken = [self.starting_rectangle()]
