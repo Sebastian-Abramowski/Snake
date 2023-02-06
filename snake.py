@@ -91,7 +91,7 @@ class Snake:
             if how_many == 1:
                 pygame.draw.circle(
                     window, self.colour, rectangle.center, SQUARE_SIZE//2)
-            elif i == 0 or i == (how_many - 1):
+            elif i == (how_many - 1):
                 if self.direction == 'E':
                     recta = pygame.Rect(
                         rectangle.left, rectangle.top, SQUARE_SIZE // 2, SQUARE_SIZE)
@@ -107,5 +107,36 @@ class Snake:
                 pygame.draw.rect(window, self.colour, recta)
                 pygame.draw.circle(
                     window, self.colour, rectangle.center, SQUARE_SIZE//2)
+            elif i == 0:
+                direction = self._direction_of_last_square()
+                if direction == 'E':
+                    recta = pygame.Rect(
+                        rectangle.left + SQUARE_SIZE // 2, rectangle.top, SQUARE_SIZE // 2, SQUARE_SIZE)
+                if direction == 'W':
+                    recta = pygame.Rect(
+                        rectangle.left, rectangle.top, SQUARE_SIZE // 2, SQUARE_SIZE)
+                if direction == 'N':
+                    recta = pygame.Rect(
+                        rectangle.left, rectangle.top, SQUARE_SIZE, SQUARE_SIZE//2)
+                if direction == 'S':
+                    recta = pygame.Rect(
+                        rectangle.left, rectangle.top + SQUARE_SIZE//2, SQUARE_SIZE, SQUARE_SIZE//2)
+                pygame.draw.rect(window, self.colour, recta)
+                pygame.draw.circle(
+                    window, self.colour, rectangle.center, SQUARE_SIZE//2)
             else:
                 pygame.draw.rect(window, self.colour, rectangle)
+
+    def _direction_of_last_square(self):
+        if len(self.rectangles_taken) < 2:
+            return None
+        center_last = self.rectangles_taken[0].center
+        center_after_last = self.rectangles_taken[1].center
+        if center_after_last[0] > center_last[0]:
+            return 'E'
+        elif center_after_last[0] < center_last[0]:
+            return 'W'
+        elif center_after_last[1] > center_last[1]:
+            return 'S'
+        else:
+            return 'N'
