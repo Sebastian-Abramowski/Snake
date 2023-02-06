@@ -60,4 +60,7 @@ class Snake:
         for rectangle in self.rectangles_taken:
             if apple.rect.center == rectangle.center:
                 apple.exists = False
-                self.length += 1
+                if apple.colour == 'green':
+                    self.length += 1
+                return True
+        return False

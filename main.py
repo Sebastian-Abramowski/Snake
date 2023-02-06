@@ -60,6 +60,9 @@ pygame.time.set_timer(
 EXTRA_SPEED_EVENT = pygame.USEREVENT + 2
 NORMAL_SPEED_EVENT = pygame.USEREVENT + 3
 END_OF_THE_GAME_EVENT = pygame.USEREVENT + 5
+BLACK_APPLE_EVENT = pygame.USEREVENT + 6
+pygame.time.set_timer(BLACK_APPLE_EVENT, 5000)
+
 
 # Button
 BUTTON_IMG = pygame.image.load('Images/restart_button.png')
@@ -96,6 +99,7 @@ def main():
     snake = Snake()
     snake_game = Game(window, board, snake)
     green_apple = Apple(GREEN_COLOUR_IMG, 'green', board, snake)
+    black_apple = Apple(BLACK_COLOUR_IMG, 'black', board, snake)
 
     last_time = time()
     seconds = 0
@@ -109,6 +113,9 @@ def main():
         if green_apple.exists is False:
             green_apple.update_random_center_of_rect()
         green_apple.draw(window)
+        if black_apple.exists is False:
+            black_apple.update_random_center_of_rect()
+        black_apple.draw(window)
 
         # check for game over and reset
         if snake_game.end is True:
@@ -205,6 +212,8 @@ def main():
                 pygame.time.wait(500)
                 pygame.event.post(pygame.event.Event(END_OF_THE_GAME_EVENT))
             if event.type == END_OF_THE_GAME_EVENT:
+                pygame.time.set_timer(
+                    MOVING_SNAKE_EVERY_SEC_EVENT, 0)
                 snake_game.end = True
 
         # snake_game.printer.draw_sprite(YELLOW_COLOUR_IMG, (50, 50))
@@ -212,6 +221,9 @@ def main():
         # snake_game.printer.draw_sprite(COLOUR_APPLE_IMG, (250, 250))
         # snake_game.printer.draw_sprite(GREEN_COLOUR_IMG, (350, 350))
         snake_game.snake.check_for_coll_with_apple(green_apple)
+        if snake_game.snake.check_for_coll_with_apple(black_apple):
+            pygame.event.post(pygame.event.Event(END_OF_THE_GAME_EVENT))
+
     pygame.quit()
 
 
