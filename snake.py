@@ -1,5 +1,5 @@
 import pygame
-from constants import GREEN, WHITE
+from constants import GREEN, WHITE, SQUARE_SIZE
 
 SNAKE_COLLISION = pygame.USEREVENT + 4
 COLLISION_WITH_WALL_EVENT = pygame.USEREVENT
@@ -86,5 +86,26 @@ class Snake:
         return False
 
     def draw(self, window):
-        for rectangle in self.rectangles_taken:
-            pygame.draw.rect(window, self.colour, rectangle)
+        how_many = len(self.rectangles_taken)
+        for i, rectangle in enumerate(self.rectangles_taken):
+            if how_many == 1:
+                pygame.draw.circle(
+                    window, self.colour, rectangle.center, SQUARE_SIZE//2)
+            elif i == 0 or i == (how_many - 1):
+                if self.direction == 'E':
+                    recta = pygame.Rect(
+                        rectangle.left, rectangle.top, SQUARE_SIZE // 2, SQUARE_SIZE)
+                if self.direction == 'W':
+                    recta = pygame.Rect(
+                        rectangle.left + SQUARE_SIZE // 2, rectangle.top, SQUARE_SIZE // 2, SQUARE_SIZE)
+                if self.direction == 'N':
+                    recta = pygame.Rect(
+                        rectangle.left, rectangle.top + SQUARE_SIZE//2, SQUARE_SIZE, SQUARE_SIZE//2)
+                if self.direction == 'S':
+                    recta = pygame.Rect(
+                        rectangle.left, rectangle.top, SQUARE_SIZE, SQUARE_SIZE//2)
+                pygame.draw.rect(window, self.colour, recta)
+                pygame.draw.circle(
+                    window, self.colour, rectangle.center, SQUARE_SIZE//2)
+            else:
+                pygame.draw.rect(window, self.colour, rectangle)
