@@ -37,7 +37,20 @@ class Snake:
             else:
                 pygame.event.post(pygame.event.Event(SNAKE_COLLISION))
         else:
-            pygame.event.post(pygame.event.Event(COLLISION_WITH_WALL_EVENT))
+            if self.colour == GREEN:
+                pygame.event.post(pygame.event.Event(COLLISION_WITH_WALL_EVENT))
+            else:
+                if i < 0:
+                    i = len(board.rectangles) - 1
+                elif j < 0:
+                    j = len(board.rectangles[0]) - 1
+                elif not cond1:
+                    i = 0
+                elif not cond2:
+                    j = 0
+                self.moved = True
+                self.head = (i, j)
+                self.rectangles_taken.append(board.rectangles[i][j])
         self.check_length()
 
     def move_snake_player(self, board, where):
