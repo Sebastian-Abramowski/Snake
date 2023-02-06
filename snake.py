@@ -1,4 +1,5 @@
 import pygame
+from constants import GREEN, WHITE
 
 SNAKE_COLLISION = pygame.USEREVENT + 4
 COLLISION_WITH_WALL_EVENT = pygame.USEREVENT
@@ -6,6 +7,7 @@ COLLISION_WITH_WALL_EVENT = pygame.USEREVENT
 
 class Snake:
     def __init__(self):
+        self.colour = GREEN
         self.moved = False
         self.length = 1
         self.direction = 'E'
@@ -13,10 +15,6 @@ class Snake:
         self.rectangles_taken = []
 
     def move_snake(self, board, where):
-        # where = 'up' / 'left' / 'right' / 'down'
-        if self.skip_unallowed_move(where):
-            return None
-
         i, j = self.head
         if where == 'N':
             i -= 1
@@ -38,21 +36,26 @@ class Snake:
                     board.rectangles[i][j])
             else:
                 pygame.event.post(pygame.event.Event(SNAKE_COLLISION))
-
         else:
-            pygame.event.post(pygame.event.Event(pygame.USEREVENT))
+            pygame.event.post(pygame.event.Event(COLLISION_WITH_WALL_EVENT))
         self.check_length()
+
+    def move_snake_player(self, board, where):
+        # where = 'up' / 'left' / 'right' / 'down'
+        if self.skip_unallowed_move(where):
+            return None
+        self.move_snake(board, where)
 
     def check_length(self):
         while len(self.rectangles_taken) > self.length:
             self.rectangles_taken.pop(0)
 
     def skip_unallowed_move(self, direction_p):
-        cond1 = self.direction == 'N' and direction_p == 'S'
-        cond2 = self.direction == 'S' and direction_p == 'N'
-        cond3 = self.direction == 'E' and direction_p == 'W'
-        cond4 = self.direction == 'W' and direction_p == 'E'
-        if cond1 or cond2 or cond3 or cond4:
+        verti = ['N', 'S']
+        hori = ['E', 'W']
+        cond1 = self.direction in verti and direction_p in verti
+        cond2 = self.direction in hori and direction_p in hori
+        if cond1 or cond2:
             return True
         return False
 
@@ -62,5 +65,13 @@ class Snake:
                 apple.exists = False
                 if apple.colour == 'green':
                     self.length += 1
+                    self.colour = GREEN
+                if apple.colour == 'yellow':
+                    self.length += 2
+                    self.colour = WHITE
                 return True
         return False
+
+    def draw(self, window):
+        for rectangle in self.rectangles_taken:
+            pygame.draw.rect(window, self.colour, rectangle)

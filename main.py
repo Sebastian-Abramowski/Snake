@@ -142,7 +142,6 @@ def main():
                 pygame.time.set_timer(
                     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
                 main()
-            # play = False
         pygame.display.update()
 
         # turning off resizeability after moving the snake
@@ -164,13 +163,13 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if snake_game.end is False:
                     if event.key == pygame.K_UP:
-                        snake_game.snake.move_snake(board, 'N')
+                        snake_game.snake.move_snake_player(board, 'N')
                     if event.key == pygame.K_DOWN:
-                        snake_game.snake.move_snake(board, 'S')
+                        snake_game.snake.move_snake_player(board, 'S')
                     if event.key == pygame.K_RIGHT:
-                        snake_game.snake.move_snake(board, 'E')
+                        snake_game.snake.move_snake_player(board, 'E')
                     if event.key == pygame.K_LEFT:
-                        snake_game.snake.move_snake(board, 'W')
+                        snake_game.snake.move_snake_player(board, 'W')
                     if event.key == pygame.K_1:
                         pygame.event.post(pygame.event.Event(
                             EXTRA_SPEED_EVENT))
@@ -224,10 +223,6 @@ def main():
                     MOVING_SNAKE_EVERY_SEC_EVENT, 0)
                 snake_game.end = True
 
-        # snake_game.printer.draw_sprite(YELLOW_COLOUR_IMG, (50, 50))
-        # snake_game.printer.draw_sprite(BLACK_COLOUR_IMG, (150, 150))
-        # snake_game.printer.draw_sprite(COLOUR_APPLE_IMG, (250, 250))
-        # snake_game.printer.draw_sprite(GREEN_COLOUR_IMG, (350, 350))
         if snake_game.snake.check_for_coll_with_apple(green_apple):
             pygame.event.post(pygame.event.Event(NORMAL_SPEED_EVENT))
         if snake_game.snake.check_for_coll_with_apple(black_apple):

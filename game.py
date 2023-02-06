@@ -60,10 +60,6 @@ class GamePrinter:
         text = str(best_score)
         self._draw_text_by_border(text, 125)
 
-    def draw_rectangles_taken(self):
-        for rectangle in self.game_logic.snake.rectangles_taken:
-            draw.rect(self.window, GREEN, rectangle)
-
     def draw_eyes_on_snakes(self):
         radius = int(SQUARE_SIZE*0.1)
         for poss_x, poss_y in self.game_logic.possition_of_eyes():
@@ -74,7 +70,7 @@ class GamePrinter:
         self.draw_rectangles()
         self.draw_time(seconds)
         self.draw_best_score(file_path)
-        self.draw_rectangles_taken()
+        self.game_logic.snake.draw(self.window)
         self.draw_eyes_on_snakes()
 
 
