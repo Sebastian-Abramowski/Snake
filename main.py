@@ -60,8 +60,6 @@ pygame.time.set_timer(
 EXTRA_SPEED_EVENT = pygame.USEREVENT + 2
 NORMAL_SPEED_EVENT = pygame.USEREVENT + 3
 END_OF_THE_GAME_EVENT = pygame.USEREVENT + 5
-BLACK_APPLE_EVENT = pygame.USEREVENT + 6
-pygame.time.set_timer(BLACK_APPLE_EVENT, 5000)
 
 
 # Button
@@ -115,9 +113,8 @@ def main():
         if green_apple.exists is False:
             green_apple.update_random_center_of_rect()
         green_apple.draw(window)
-        if black_apple.exists is False:
-            black_apple.update_random_center_of_rect()
-        black_apple.draw(window)
+        if black_apple.exists:
+            black_apple.draw(window)
         if yellow_apple.exists is False:
             yellow_apple.update_random_center_of_rect()
         yellow_apple.draw(window)
@@ -154,8 +151,9 @@ def main():
         window.fill(BLACK3)
 
         if time() - last_time >= 1:
-            seconds += 1
-            last_time = time()
+            if snake_game.end is False:
+                seconds += 1
+                last_time = time()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
