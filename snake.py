@@ -1,5 +1,8 @@
 import pygame
 
+SNAKE_COLLISION = pygame.USEREVENT + 4
+COLLISION_WITH_WALL_EVENT = pygame.USEREVENT
+
 
 class Snake:
     def __init__(self):
@@ -33,6 +36,9 @@ class Snake:
                 self.head = (i, j)
                 self.rectangles_taken.append(
                     board.rectangles[i][j])
+            else:
+                pygame.event.post(pygame.event.Event(SNAKE_COLLISION))
+
         else:
             pygame.event.post(pygame.event.Event(pygame.USEREVENT))
         self.check_length()

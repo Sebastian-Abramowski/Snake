@@ -1,11 +1,12 @@
 from constants import BLACK1, BLACK2, FONT
 from constants import WHITE, GREEN, SQUARE_SIZE
-from pygame import draw
+from pygame import draw, sprite
 from other import take_best_score
 
 
 class Game:
     def __init__(self, window, board, snake):
+        self.end = False
         self.game_logic = GameLogic(board, snake)
         self.printer = GamePrinter(window, board, self.game_logic)
         self.board = board
@@ -71,12 +72,21 @@ class GamePrinter:
         for poss_x, poss_y in self.game_logic.possition_of_eyes():
             draw.circle(self.window, BLACK1, (poss_x, poss_y), radius)
 
+    def draw(self, snake, seconds, file_path):
+        self.draw_score(snake)
+        self.draw_rectangles()
+        self.draw_time(seconds)
+        self.draw_best_score(file_path)
+        self.draw_rectangles_taken()
+        self.draw_eyes_on_snakes()
+
 
 class GameLogic:
     def __init__(self, board, snake):
         self.board = board
         self.snake = snake
         snake.rectangles_taken = [self.starting_rectangle()]
+        self.all_sprites = sprite.Group()
 
     def starting_rectangle(self):
         index_i = len(self.board.rectangles) // 2
