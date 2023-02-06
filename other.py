@@ -44,3 +44,8 @@ def take_best_score(txt_file_name):
         with open(txt_file_name, 'w') as file_handle:
             file_handle.write('0')
     return int(best_score)
+
+
+def write_best_score(txt_file_name, score):
+    with open(txt_file_name, 'w') as file_handle:
+        file_handle.write(str(score))

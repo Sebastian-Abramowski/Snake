@@ -7,7 +7,7 @@ COLLISION_WITH_WALL_EVENT = pygame.USEREVENT
 class Snake:
     def __init__(self):
         self.moved = False
-        self.length = 10
+        self.length = 1
         self.direction = 'E'
         self.head = None
         self.rectangles_taken = []
@@ -55,3 +55,9 @@ class Snake:
         if cond1 or cond2 or cond3 or cond4:
             return True
         return False
+
+    def check_for_coll_with_apple(self, apple):
+        for rectangle in self.rectangles_taken:
+            if apple.rect.center == rectangle.center:
+                apple.exists = False
+                self.length += 1

@@ -5,8 +5,11 @@ from board import Board
 from game import Game
 from snake import Snake
 from time import time
-from other import music_icon, best_score_icon
+from other import write_best_score
+from other import music_icon, best_score_icon, take_best_score
 from snake import SNAKE_COLLISION, COLLISION_WITH_WALL_EVENT
+from constants import DELAY_BETWEEN_MOVES
+from apples import Apple
 
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -52,7 +55,8 @@ YELLOW_COLOUR_IMG = pygame.transform.scale(
 # Custom event
 MOVING_SNAKE_EVERY_SEC_EVENT = pygame.USEREVENT + 1
 # every 3 sec this is called
-pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 500)
+pygame.time.set_timer(
+    MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
 EXTRA_SPEED_EVENT = pygame.USEREVENT + 2
 NORMAL_SPEED_EVENT = pygame.USEREVENT + 3
 END_OF_THE_GAME_EVENT = pygame.USEREVENT + 5
@@ -91,6 +95,7 @@ def main():
     board = Board(window)
     snake = Snake()
     snake_game = Game(window, board, snake)
+    green_apple = Apple(GREEN_COLOUR_IMG, 'green', board, snake)
 
     last_time = time()
     seconds = 0
@@ -101,16 +106,26 @@ def main():
             snake, seconds, "best_score.txt")
         music_icon(window, music)
         best_score_icon(window)
+        if green_apple.exists is False:
+            green_apple.update_random_center_of_rect()
+        green_apple.draw(window)
 
         # check for game over and reset
         if snake_game.end is True:
+            possible_best_score = snake_game.snake.length
+            best_score_in_file = take_best_score("best_score.txt")
+
+            if possible_best_score > best_score_in_file:
+                write_best_score("best_score.txt", possible_best_score)
+
             button = Button(
                 window.get_width() // 2 - 71,
                 window.get_height() // 2 - 21,
                 BUTTON_IMG
                 )
             if button.draw(window) is True:
-                pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 500)
+                pygame.time.set_timer(
+                    MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
                 main()
             # play = False
         pygame.display.update()
@@ -172,7 +187,8 @@ def main():
             if event.type == EXTRA_SPEED_EVENT:
                 pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 100)
             if event.type == NORMAL_SPEED_EVENT:
-                pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 500)
+                pygame.time.set_timer(
+                    MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
             if event.type == MOVING_SNAKE_EVERY_SEC_EVENT:
                 direction_of_sn = snake_game.snake.direction
                 snake_game.snake.move_snake(board, direction_of_sn)
@@ -195,7 +211,7 @@ def main():
         # snake_game.printer.draw_sprite(BLACK_COLOUR_IMG, (150, 150))
         # snake_game.printer.draw_sprite(COLOUR_APPLE_IMG, (250, 250))
         # snake_game.printer.draw_sprite(GREEN_COLOUR_IMG, (350, 350))
-
+        snake_game.snake.check_for_coll_with_apple(green_apple)
     pygame.quit()
 
 

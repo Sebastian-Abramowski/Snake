@@ -64,9 +64,6 @@ class GamePrinter:
         for rectangle in self.game_logic.snake.rectangles_taken:
             draw.rect(self.window, GREEN, rectangle)
 
-    def draw_sprite(self, img, possition):
-        self.window.blit(img, possition)
-
     def draw_eyes_on_snakes(self):
         radius = int(SQUARE_SIZE*0.1)
         for poss_x, poss_y in self.game_logic.possition_of_eyes():
@@ -86,7 +83,6 @@ class GameLogic:
         self.board = board
         self.snake = snake
         snake.rectangles_taken = [self.starting_rectangle()]
-        self.all_sprites = sprite.Group()
 
     def starting_rectangle(self):
         index_i = len(self.board.rectangles) // 2
