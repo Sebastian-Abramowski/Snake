@@ -24,4 +24,4 @@ FONT = font.SysFont('calibri', 20, True)
 # Game
 SOUND_EFFECTS = 1
 ICON_SIZE = (40, 40)
-DELAY_BETWEEN_MOVES = 250
+DELAY_BETWEEN_MOVES = 200

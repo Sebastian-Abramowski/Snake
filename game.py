@@ -1,6 +1,6 @@
 from constants import BLACK1, BLACK2, FONT
-from constants import WHITE, GREEN, SQUARE_SIZE
-from pygame import draw, sprite
+from constants import WHITE, SQUARE_SIZE
+from pygame import draw
 from other import take_best_score
 
 

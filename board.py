@@ -10,6 +10,7 @@ class Board:
         self.square_size = SQUARE_SIZE
         self.centers_of_squares = self.calc_centers_of_squares()
         self.rectangles = self.make_array_of_rectangles()
+        self.centers_with_apples = []
 
     def _possible_size_of_win(self):
         w, h = self.window.get_size()
