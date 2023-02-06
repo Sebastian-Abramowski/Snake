@@ -1,8 +1,10 @@
+import pygame
+
 
 class Snake:
     def __init__(self):
         self.moved = False
-        self.length = 3
+        self.length = 10
         self.direction = 'E'
         self.head = None
         self.rectangles_taken = []
@@ -24,14 +26,15 @@ class Snake:
         self.direction = where
         cond1 = (i <= len(board.rectangles) - 1)
         cond2 = (j <= len(board.rectangles[0]) - 1)
-        if i >= 0 and j >= 0:
-            if cond1 and cond2:
-                taken = self.rectangles_taken
-                if board.rectangles[i][j] not in taken:
-                    self.moved = True
-                    self.head = (i, j)
-                    self.rectangles_taken.append(
-                        board.rectangles[i][j])
+        if (i >= 0 and j >= 0) and (cond1 and cond2):
+            taken = self.rectangles_taken
+            if board.rectangles[i][j] not in taken:
+                self.moved = True
+                self.head = (i, j)
+                self.rectangles_taken.append(
+                    board.rectangles[i][j])
+        else:
+            pygame.event.post(pygame.event.Event(pygame.USEREVENT))
         self.check_length()
 
     def check_length(self):

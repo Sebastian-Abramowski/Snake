@@ -17,12 +17,13 @@ clock = pygame.time.Clock()
 point_sound = pygame.mixer.Sound(
     'Sound/point_sound.wav')
 collis_with_wall_sound = pygame.mixer.Sound(
-    'Sound/collision_with_wall_sound.wav')
+    'Sound/wall_collision.wav')
 pygame.mixer.music.load('Sound/old_snake_theme.wav')
 if SOUND_EFFECTS == 1:
     music = True
-    pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.1)
+    # pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.05)
+pygame.mixer.Sound.set_volume(collis_with_wall_sound, 0.05)
 
 # Images for sprites
 COLOUR_APPLE_IMG = pygame.image.load(
@@ -42,6 +43,13 @@ YELLOW_COLOUR_IMG = pygame.image.load(
 YELLOW_COLOUR_IMG = pygame.transform.scale(
     YELLOW_COLOUR_IMG, (SQUARE_SIZE, SQUARE_SIZE))
 
+
+# Custom event
+MOVING_SNAKE_EVERY_SEC_EVENT = pygame.USEREVENT + 1
+# every 3 sec this is called
+pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 500)
+EXTRA_SPEED_EVENT = pygame.USEREVENT + 2
+NORMAL_SPEED_EVENT = pygame.USEREVENT + 3
 
 play = True
 
@@ -79,6 +87,10 @@ while play:
                 snake_game.snake.move_snake(board, 'E')
             if event.key == pygame.K_LEFT:
                 snake_game.snake.move_snake(board, 'W')
+            if event.key == pygame.K_1:
+                pygame.event.post(pygame.event.Event(EXTRA_SPEED_EVENT))
+            if event.key == pygame.K_2:
+                pygame.event.post(pygame.event.Event(NORMAL_SPEED_EVENT))
         if event.type == pygame.VIDEORESIZE:
             if snake_game.started is False:
                 width, height = event.size
@@ -101,6 +113,15 @@ while play:
                     else:
                         music = True
                         pygame.mixer.music.play(-1)
+        if event.type == pygame.USEREVENT:
+            collis_with_wall_sound.play(1)
+        if event.type == EXTRA_SPEED_EVENT:
+            pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 100)
+        if event.type == NORMAL_SPEED_EVENT:
+            pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 500)
+        if event.type == MOVING_SNAKE_EVERY_SEC_EVENT:
+            direction_of_sn = snake_game.snake.direction
+            snake_game.snake.move_snake(board, direction_of_sn)
     snake_game.printer.draw_rectangles()
     snake_game.printer.draw_score(snake)
     snake_game.printer.draw_time(seconds)
