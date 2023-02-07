@@ -11,10 +11,13 @@ from snake import SNAKE_COLLISION, COLLISION_WITH_WALL_EVENT
 from constants import DELAY_BETWEEN_MOVES
 from constants import MOVING_SNAKE_EVERY_SEC_EVENT, EXTRA_SPEED_EVENT
 from constants import NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT
+import sys
 
 
 # TODO przywróc muzyke
-# TODO flake8
+# TODO owoce nachodzą na siebie czasem
+# TODO options menu
+
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.display.set_caption("Snake")
@@ -55,13 +58,15 @@ YELLOW_COLOUR_IMG = pygame.transform.scale(
     YELLOW_COLOUR_IMG, (SQUARE_SIZE, SQUARE_SIZE))
 
 
-# every 3 sec this is called
+# every passed time this is called
 pygame.time.set_timer(
     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
 
 # Button
 BUTTON_RESTART_IMG = pygame.image.load('Images/reset.png')
 BUTTON_EXIT_IMG = pygame.image.load('Images/exit.png')
+BUTTON_PLAT_IMG = pygame.image.load('Images/play.png')
+BUTTON_MENU_IMG = pygame.image.load('Images/menu.png')
 
 
 class Button():
@@ -85,8 +90,40 @@ class Button():
 
         return action
 
-# TODO powtarzalnośc kodu przy jabłkach
-# TODO dodaj menu główne i zmień przyciski, RESTART I QUIT
+
+def main_menu():
+    while True:
+        clock.tick(FPS)
+        window.fill(BLACK3)
+
+        button_play = Button(
+            window.get_width() // 2 - 71,
+            window.get_height() // 2 - 21,
+            BUTTON_PLAT_IMG
+            )
+
+        button_exit = Button(
+            window.get_width() // 2 - 71,
+            window.get_height() // 2 + 30,
+            BUTTON_EXIT_IMG
+            )
+
+        if button_exit.draw(window) is True:
+            pygame.quit()
+            sys.exit()
+        if button_play.draw(window) is True:
+            main()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
 
 
 def main():
@@ -120,18 +157,30 @@ def main():
             if possible_best_score > best_score_in_file:
                 write_best_score("best_score.txt", possible_best_score)
 
-            button_reset = Button(
-                window.get_width() // 2 - 71,
-                window.get_height() // 2 - 21,
-                BUTTON_RESTART_IMG
-                )
             button_exit = Button(
                 window.get_width() // 2 - 71,
                 window.get_height() // 2 + 30,
                 BUTTON_EXIT_IMG
                 )
+
             if button_exit.draw(window) is True:
                 play = False
+
+            button_reset = Button(
+                window.get_width() // 2 - 71,
+                window.get_height() // 2 - 21,
+                BUTTON_RESTART_IMG
+                )
+
+            button_menu = Button(
+                window.get_width() // 2 - 71,
+                window.get_height() // 2 - 71,
+                BUTTON_MENU_IMG
+                )
+
+            if button_menu.draw(window) is True:
+                main_menu()
+
             if button_reset.draw(window) is True:
                 pygame.time.set_timer(
                     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
@@ -223,4 +272,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main_menu()
