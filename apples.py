@@ -3,20 +3,22 @@ from random import choice
 
 
 class Apple(sprite.Sprite):
-    def __init__(self, image, colour, board=None, snake=None, center=None):
+    def __init__(self, image, colour, center=(0, 0)):
         super().__init__()
         self.exists = True
         self.image = image
         self.colour = colour
+        self.board = None
+        self.snake = None
+        self.center = center
+        self.rect = self.image.get_rect(
+            center=center)
+
+    def configuration(self, board, snake):
         self.board = board
         self.snake = snake
-        if board is not None and snake is not None:
-            if center is not None:
-                self.rect = self.image.get_rect(
-                    center=center)
-            else:
-                self.rect = self.image.get_rect(
-                    center=self.pick_random_center_of_rect())
+        if self.center == (0, 0):
+            self.rect.center = self.pick_random_center_of_rect()
 
     def pick_random_center_of_rect(self):
         picked = False

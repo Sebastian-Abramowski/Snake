@@ -14,56 +14,63 @@ class Snake:
         self.head = None
         self.rectangles_taken = []
 
-    def move_snake(self, board, where):
-        i, j = self.head
+    def _change_direction(self, where):
+        x, y = self.head
         if where == 'N':
-            i -= 1
+            x -= 1
         elif where == 'S':
-            i += 1
+            x += 1
         elif where == 'E':
-            j += 1
+            y += 1
         elif where == 'W':
-            j -= 1
+            y -= 1
         self.direction = where
-        cond1 = (i <= len(board.rectangles) - 1)
-        cond2 = (j <= len(board.rectangles[0]) - 1)
-        if (i >= 0 and j >= 0) and (cond1 and cond2):
+        return x, y
+
+    def move_snake(self, board, where):
+        x_of_new_head, y_of_new_head = self._change_direction(where)
+        self._move_or_indicate_collision(board, x_of_new_head, y_of_new_head)
+        self._check_length()
+
+    def move_snake_player(self, board, where):
+        # where = 'up' / 'left' / 'right' / 'down'
+        if self._skip_unallowed_move(where):
+            return None
+        self.move_snake(board, where)
+
+    def _move_or_indicate_collision(self, board, x_of_new_head, y_of_new_head):
+        cond1 = (x_of_new_head <= len(board.rectangles) - 1)
+        cond2 = (y_of_new_head <= len(board.rectangles[0]) - 1)
+        if (x_of_new_head >= 0 and y_of_new_head >= 0) and (cond1 and cond2):
             taken = self.rectangles_taken
-            if board.rectangles[i][j] not in taken:
+            if board.rectangles[x_of_new_head][y_of_new_head] not in taken:
                 self.moved = True
-                self.head = (i, j)
+                self.head = (x_of_new_head, y_of_new_head)
                 self.rectangles_taken.append(
-                    board.rectangles[i][j])
+                    board.rectangles[x_of_new_head][y_of_new_head])
             else:
                 pygame.event.post(pygame.event.Event(SNAKE_COLLISION))
         else:
             if self.colour == GREEN:
                 pygame.event.post(pygame.event.Event(COLLISION_WITH_WALL_EVENT))
             else:
-                if i < 0:
-                    i = len(board.rectangles) - 1
-                elif j < 0:
-                    j = len(board.rectangles[0]) - 1
+                if x_of_new_head < 0:
+                    x_of_new_head = len(board.rectangles) - 1
+                elif y_of_new_head < 0:
+                    y_of_new_head = len(board.rectangles[0]) - 1
                 elif not cond1:
-                    i = 0
+                    x_of_new_head = 0
                 elif not cond2:
-                    j = 0
+                    y_of_new_head = 0
                 self.moved = True
-                self.head = (i, j)
-                self.rectangles_taken.append(board.rectangles[i][j])
-        self.check_length()
+                self.head = (x_of_new_head, y_of_new_head)
+                self.rectangles_taken.append(board.rectangles[x_of_new_head][y_of_new_head])
 
-    def move_snake_player(self, board, where):
-        # where = 'up' / 'left' / 'right' / 'down'
-        if self.skip_unallowed_move(where):
-            return None
-        self.move_snake(board, where)
-
-    def check_length(self):
+    def _check_length(self):
         while len(self.rectangles_taken) > self.length:
             self.rectangles_taken.pop(0)
 
-    def skip_unallowed_move(self, direction_p):
+    def _skip_unallowed_move(self, direction_p):
         verti = ['N', 'S']
         hori = ['E', 'W']
         cond1 = self.direction in verti and direction_p in verti
@@ -84,7 +91,7 @@ class Snake:
                     self.colour = WHITE
                 return True
         return False
-
+#TODO ta metoda źle wygląda
     def draw(self, window):
         how_many = len(self.rectangles_taken)
         for i, rectangle in enumerate(self.rectangles_taken):

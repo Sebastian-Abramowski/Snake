@@ -11,7 +11,8 @@ from snake import SNAKE_COLLISION, COLLISION_WITH_WALL_EVENT
 from constants import DELAY_BETWEEN_MOVES
 from apples import Apple
 
-
+#TODO przywróc muzyke
+#TODO flake8
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.display.set_caption("Snake")
@@ -87,7 +88,8 @@ class Button():
 
         return action
 
-
+#TODO powtarzalnośc kodu przy jabłkach
+#TODO dodaj menu główne i zmień przyciski, RESTART I QUIT
 def main():
     global window, music
 
@@ -96,10 +98,14 @@ def main():
     board = Board(window)
     snake = Snake()
     snake_game = Game(window, board, snake)
-    green_apple = Apple(GREEN_COLOUR_IMG, 'green', board, snake)
-    black_apple = Apple(BLACK_COLOUR_IMG, 'black', board, snake)
-    yellow_apple = Apple(YELLOW_COLOUR_IMG, 'yellow', board, snake)
-    colour_apple = Apple(COLOUR_APPLE_IMG, 'colour', board, snake)
+    green_apple = Apple(GREEN_COLOUR_IMG, 'green')
+    green_apple.configuration(board, snake)
+    black_apple = Apple(BLACK_COLOUR_IMG, 'black')
+    black_apple.configuration(board, snake)
+    yellow_apple = Apple(YELLOW_COLOUR_IMG, 'yellow')
+    yellow_apple.configuration(board, snake)
+    colour_apple = Apple(COLOUR_APPLE_IMG, 'colour')
+    colour_apple.configuration(board, snake)
 
     last_time = time()
     seconds = 0
