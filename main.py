@@ -9,11 +9,12 @@ from other import write_best_score
 from other import music_icon, best_score_icon, take_best_score
 from snake import SNAKE_COLLISION, COLLISION_WITH_WALL_EVENT
 from constants import DELAY_BETWEEN_MOVES
-from constants import MOVING_SNAKE_EVERY_SEC_EVENT, EXTRA_SPEED_EVENT, NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT
+from constants import MOVING_SNAKE_EVERY_SEC_EVENT, EXTRA_SPEED_EVENT
+from constants import NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT
 
 
-#TODO przywróc muzyke
-#TODO flake8
+# TODO przywróc muzyke
+# TODO flake8
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.display.set_caption("Snake")
@@ -84,8 +85,10 @@ class Button():
 
         return action
 
-#TODO powtarzalnośc kodu przy jabłkach
-#TODO dodaj menu główne i zmień przyciski, RESTART I QUIT
+# TODO powtarzalnośc kodu przy jabłkach
+# TODO dodaj menu główne i zmień przyciski, RESTART I QUIT
+
+
 def main():
     global window, music
 
@@ -94,7 +97,9 @@ def main():
     board = Board(window)
     snake = Snake()
     snake_game = Game(window, board, snake)
-    snake_game.configurate_apples(GREEN_COLOUR_IMG, BLACK_COLOUR_IMG, YELLOW_COLOUR_IMG, COLOUR_APPLE_IMG)
+    snake_game.configurate_apples(
+        GREEN_COLOUR_IMG, BLACK_COLOUR_IMG,
+        YELLOW_COLOUR_IMG, COLOUR_APPLE_IMG)
 
     last_time = time()
     seconds = 0

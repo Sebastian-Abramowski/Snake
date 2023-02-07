@@ -3,7 +3,8 @@ from constants import WHITE, SQUARE_SIZE
 from pygame import draw, event
 from other import take_best_score
 from apples import Apple
-from constants import NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT, EXTRA_SPEED_EVENT
+from constants import NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT
+from constants import EXTRA_SPEED_EVENT
 
 
 class Game:
@@ -31,22 +32,25 @@ class Game:
         self.colour_apple.configuration(self.board, self.snake)
 
     def check_for_collision_with_apple(self):
-        if self.snake.check_for_coll_with_apple(self.green_apple):
+        bool_coll_with_green = self.snake.check_for_coll_with_apple(
+            self.green_apple)
+        bool_coll_with_yellow = self.snake.check_for_coll_with_apple(
+            self.yellow_apple)
+        if bool_coll_with_green or bool_coll_with_yellow:
             event.post(event.Event(NORMAL_SPEED_EVENT))
         if self.snake.check_for_coll_with_apple(self.black_apple):
             event.post(event.Event(END_OF_THE_GAME_EVENT))
         if self.snake.check_for_coll_with_apple(self.colour_apple):
             event.post(event.Event(EXTRA_SPEED_EVENT))
-        if self.snake.check_for_coll_with_apple(self.yellow_apple):
-            event.post(event.Event(NORMAL_SPEED_EVENT))
 
     def update_apples(self):
-        if self.green_apple.exists is False:
-            self.green_apple.update_random_center_of_rect()
-        if self.yellow_apple.exists is False:
-            self.yellow_apple.update_random_center_of_rect()
-        if self.colour_apple.exists is False:
-            self.colour_apple.update_random_center_of_rect()
+        self._check_for_update_apples(self.green_apple)
+        self._check_for_update_apples(self.yellow_apple)
+        self._check_for_update_apples(self.colour_apple)
+
+    def _check_for_update_apples(self, apple):
+        if apple.exists is False:
+            apple.update_random_center_of_rect()
 
 
 class GamePrinter:
