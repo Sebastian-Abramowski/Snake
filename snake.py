@@ -1,8 +1,6 @@
 import pygame
 from constants import GREEN, WHITE, SQUARE_SIZE
-
-SNAKE_COLLISION = pygame.USEREVENT + 4
-COLLISION_WITH_WALL_EVENT = pygame.USEREVENT
+from constants import SNAKE_COLLISION, COLLISION_WITH_WALL_EVENT
 
 
 class Snake:

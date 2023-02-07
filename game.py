@@ -1,24 +1,60 @@
 from constants import BLACK1, BLACK2, FONT
 from constants import WHITE, SQUARE_SIZE
-from pygame import draw
+from pygame import draw, event
 from other import take_best_score
+from apples import Apple
+from constants import NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT, EXTRA_SPEED_EVENT
 
 
 class Game:
     def __init__(self, window, board, snake):
         self.end = False
         self.game_logic = GameLogic(board, snake)
-        self.printer = GamePrinter(window, board, self.game_logic)
+        self.printer = GamePrinter(window, board, self.game_logic, self)
         self.board = board
         self.window = window
         self.snake = snake
+        self.green_apple = None
+        self.black_apple = None
+        self.yellow_apple = None
+        self.colour_apple = None
+
+    def configurate_apples(self, green_img, black_img,
+                           yellow_img, colour_img):
+        self.green_apple = Apple(green_img, 'green')
+        self.green_apple.configuration(self.board, self.snake)
+        self.black_apple = Apple(black_img, 'black')
+        self.black_apple.configuration(self.board, self.snake)
+        self.yellow_apple = Apple(yellow_img, 'yellow')
+        self.yellow_apple.configuration(self.board, self.snake)
+        self.colour_apple = Apple(colour_img, 'colour')
+        self.colour_apple.configuration(self.board, self.snake)
+
+    def check_for_collision_with_apple(self):
+        if self.snake.check_for_coll_with_apple(self.green_apple):
+            event.post(event.Event(NORMAL_SPEED_EVENT))
+        if self.snake.check_for_coll_with_apple(self.black_apple):
+            event.post(event.Event(END_OF_THE_GAME_EVENT))
+        if self.snake.check_for_coll_with_apple(self.colour_apple):
+            event.post(event.Event(EXTRA_SPEED_EVENT))
+        if self.snake.check_for_coll_with_apple(self.yellow_apple):
+            event.post(event.Event(NORMAL_SPEED_EVENT))
+
+    def update_apples(self):
+        if self.green_apple.exists is False:
+            self.green_apple.update_random_center_of_rect()
+        if self.yellow_apple.exists is False:
+            self.yellow_apple.update_random_center_of_rect()
+        if self.colour_apple.exists is False:
+            self.colour_apple.update_random_center_of_rect()
 
 
 class GamePrinter:
-    def __init__(self, window, board, logic):
+    def __init__(self, window, board, logic, game):
         self.window = window
         self.board = board
         self.game_logic = logic
+        self.game = game
 
     def draw_rectangles(self):
         for num_of_row, row in enumerate(self.board.rectangles):
@@ -72,6 +108,14 @@ class GamePrinter:
         self.draw_best_score(file_path)
         self.game_logic.snake.draw(self.window)
         self.draw_eyes_on_snakes()
+        self.draw_apples()
+
+    def draw_apples(self):
+        self.game.green_apple.draw(self.window)
+        if self.game.black_apple.exists:
+            self.game.black_apple.draw(self.window)
+        self.game.yellow_apple.draw(self.window)
+        self.game.colour_apple.draw(self.window)
 
 
 class GameLogic:

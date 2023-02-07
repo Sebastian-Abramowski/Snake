@@ -9,7 +9,8 @@ from other import write_best_score
 from other import music_icon, best_score_icon, take_best_score
 from snake import SNAKE_COLLISION, COLLISION_WITH_WALL_EVENT
 from constants import DELAY_BETWEEN_MOVES
-from apples import Apple
+from constants import MOVING_SNAKE_EVERY_SEC_EVENT, EXTRA_SPEED_EVENT, NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT
+
 
 #TODO przywróc muzyke
 #TODO flake8
@@ -53,18 +54,13 @@ YELLOW_COLOUR_IMG = pygame.transform.scale(
     YELLOW_COLOUR_IMG, (SQUARE_SIZE, SQUARE_SIZE))
 
 
-# Custom event
-MOVING_SNAKE_EVERY_SEC_EVENT = pygame.USEREVENT + 1
 # every 3 sec this is called
 pygame.time.set_timer(
     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
-EXTRA_SPEED_EVENT = pygame.USEREVENT + 2
-NORMAL_SPEED_EVENT = pygame.USEREVENT + 3
-END_OF_THE_GAME_EVENT = pygame.USEREVENT + 5
-
 
 # Button
-BUTTON_IMG = pygame.image.load('Images/restart_button.png')
+BUTTON_RESTART_IMG = pygame.image.load('Images/reset.png')
+BUTTON_EXIT_IMG = pygame.image.load('Images/exit.png')
 
 
 class Button():
@@ -98,35 +94,18 @@ def main():
     board = Board(window)
     snake = Snake()
     snake_game = Game(window, board, snake)
-    green_apple = Apple(GREEN_COLOUR_IMG, 'green')
-    green_apple.configuration(board, snake)
-    black_apple = Apple(BLACK_COLOUR_IMG, 'black')
-    black_apple.configuration(board, snake)
-    yellow_apple = Apple(YELLOW_COLOUR_IMG, 'yellow')
-    yellow_apple.configuration(board, snake)
-    colour_apple = Apple(COLOUR_APPLE_IMG, 'colour')
-    colour_apple.configuration(board, snake)
+    snake_game.configurate_apples(GREEN_COLOUR_IMG, BLACK_COLOUR_IMG, YELLOW_COLOUR_IMG, COLOUR_APPLE_IMG)
 
     last_time = time()
     seconds = 0
 
     while play:
         clock.tick(FPS)
-        snake_game.printer.draw(
-            snake, seconds, "best_score.txt")
         music_icon(window, music)
         best_score_icon(window)
-        if green_apple.exists is False:
-            green_apple.update_random_center_of_rect()
-        green_apple.draw(window)
-        if black_apple.exists:
-            black_apple.draw(window)
-        if yellow_apple.exists is False:
-            yellow_apple.update_random_center_of_rect()
-        yellow_apple.draw(window)
-        if colour_apple.exists is False:
-            colour_apple.update_random_center_of_rect()
-        colour_apple.draw(window)
+        snake_game.update_apples()
+        snake_game.printer.draw(
+            snake, seconds, "best_score.txt")
 
         # check for game over and reset
         if snake_game.end is True:
@@ -136,15 +115,23 @@ def main():
             if possible_best_score > best_score_in_file:
                 write_best_score("best_score.txt", possible_best_score)
 
-            button = Button(
+            button_reset = Button(
                 window.get_width() // 2 - 71,
                 window.get_height() // 2 - 21,
-                BUTTON_IMG
+                BUTTON_RESTART_IMG
                 )
-            if button.draw(window) is True:
+            button_exit = Button(
+                window.get_width() // 2 - 71,
+                window.get_height() // 2 + 30,
+                BUTTON_EXIT_IMG
+                )
+            if button_exit.draw(window) is True:
+                play = False
+            if button_reset.draw(window) is True:
                 pygame.time.set_timer(
                     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
                 main()
+
         pygame.display.update()
 
         # turning off resizeability after moving the snake
@@ -226,16 +213,7 @@ def main():
                 pygame.time.set_timer(
                     MOVING_SNAKE_EVERY_SEC_EVENT, 0)
                 snake_game.end = True
-
-        if snake_game.snake.check_for_coll_with_apple(green_apple):
-            pygame.event.post(pygame.event.Event(NORMAL_SPEED_EVENT))
-        if snake_game.snake.check_for_coll_with_apple(black_apple):
-            pygame.event.post(pygame.event.Event(END_OF_THE_GAME_EVENT))
-        if snake_game.snake.check_for_coll_with_apple(colour_apple):
-            pygame.event.post(pygame.event.Event(EXTRA_SPEED_EVENT))
-        if snake_game.snake.check_for_coll_with_apple(yellow_apple):
-            pygame.event.post(pygame.event.Event(NORMAL_SPEED_EVENT))
-
+        snake_game.check_for_collision_with_apple()
     pygame.quit()
 
 
