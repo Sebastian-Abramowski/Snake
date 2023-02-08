@@ -14,10 +14,6 @@ from constants import NORMAL_SPEED_EVENT, END_OF_THE_GAME_EVENT
 import sys
 
 
-# TODO przywróc muzyke
-# TODO owoce nachodzą na siebie czasem
-# TODO options menu
-
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.display.set_caption("Snake")
@@ -31,13 +27,16 @@ collis_with_wall_sound = pygame.mixer.Sound(
     'Sound/wall_collision.wav')
 collis_with_snake_sound = pygame.mixer.Sound(
     'Sound/snake_collision.wav')
+click_sound = pygame.mixer.Sound(
+    'Sound/click.wav')
 pygame.mixer.music.load('Sound/old_snake_theme.wav')
 if SOUND_EFFECTS == 1:
     music = True
-    # pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.05)
 pygame.mixer.Sound.set_volume(collis_with_wall_sound, 0.05)
 pygame.mixer.Sound.set_volume(collis_with_snake_sound, 0.05)
+pygame.mixer.Sound.set_volume(click_sound, 0.05)
 
 # Images for sprites
 COLOUR_APPLE_IMG = pygame.image.load(
@@ -109,9 +108,12 @@ def main_menu():
             )
 
         if button_exit.draw(window) is True:
+            click_sound.play(0)
+            pygame.time.wait(700)
             pygame.quit()
             sys.exit()
         if button_play.draw(window) is True:
+            click_sound.play(0)
             main()
 
         for event in pygame.event.get():
@@ -164,7 +166,11 @@ def main():
                 )
 
             if button_exit.draw(window) is True:
+                click_sound.play(0)
+                pygame.time.wait(700)
                 play = False
+                pygame.quit()
+                sys.exit()
 
             button_reset = Button(
                 window.get_width() // 2 - 71,
@@ -179,9 +185,11 @@ def main():
                 )
 
             if button_menu.draw(window) is True:
+                click_sound.play(0)
                 main_menu()
 
             if button_reset.draw(window) is True:
+                click_sound.play(0)
                 pygame.time.set_timer(
                     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
                 main()
@@ -205,6 +213,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 play = False
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if snake_game.end is False:
                     if event.key == pygame.K_UP:
@@ -237,6 +247,7 @@ def main():
                 x, y = pygame.mouse.get_pos()
                 if x <= ICON_SIZE[0]:
                     if y <= ICON_SIZE[1]:
+                        click_sound.play(0)
                         if music is True:
                             music = False
                             pygame.mixer.music.fadeout(2000)
@@ -244,7 +255,7 @@ def main():
                             music = True
                             pygame.mixer.music.play(-1)
             if event.type == EXTRA_SPEED_EVENT:
-                pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 100)
+                pygame.time.set_timer(MOVING_SNAKE_EVERY_SEC_EVENT, 200)
             if event.type == NORMAL_SPEED_EVENT:
                 pygame.time.set_timer(
                     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
@@ -264,11 +275,10 @@ def main():
                 pygame.time.wait(500)
                 pygame.event.post(pygame.event.Event(END_OF_THE_GAME_EVENT))
             if event.type == END_OF_THE_GAME_EVENT:
+                snake_game.end = True
                 pygame.time.set_timer(
                     MOVING_SNAKE_EVERY_SEC_EVENT, 0)
-                snake_game.end = True
         snake_game.check_for_collision_with_apple()
-    pygame.quit()
 
 
 if __name__ == "__main__":

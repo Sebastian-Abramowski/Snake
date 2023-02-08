@@ -26,11 +26,13 @@ class Apple(sprite.Sprite):
             center = choice(choice(self.board.rectangles)).center
             for rectangle in self.snake.rectangles_taken:
                 if rectangle.center == center:
-                    if rectangle.center not in self.board.centers_with_apples:
-                        picked = False
-                        continue
-            self.board.centers_with_apples.append(center)
-            picked = True
+                    continue
+
+            if center not in self.board.centers_with_apples:
+                self.board.centers_with_apples.append(center)
+                picked = True
+            else:
+                continue
         return center
 
     def update_random_center_of_rect(self):
