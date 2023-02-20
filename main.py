@@ -58,8 +58,8 @@ YELLOW_COLOUR_IMG = pygame.transform.scale(
 
 
 # every passed time this is called
-pygame.time.set_timer(
-    MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
+# pygame.time.set_timer(
+#     MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
 
 # Button
 BUTTON_RESTART_IMG = pygame.image.load('Images/reset.png')
@@ -114,6 +114,8 @@ def main_menu():
             sys.exit()
         if button_play.draw(window) is True:
             click_sound.play(0)
+            pygame.time.set_timer(
+                    MOVING_SNAKE_EVERY_SEC_EVENT, DELAY_BETWEEN_MOVES)
             main()
 
         for event in pygame.event.get():

@@ -43,7 +43,7 @@ import pygame
 python main.py
 
 
-// change constants.py if needed
+# change constants.py if needed
 ```
 
 
