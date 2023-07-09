@@ -29,8 +29,7 @@ A simple snake game written in pygame, Python.
 ## Gifs
 
 ![gif1](Images/gif0.gif)
-
-![gif2](Images/gif1.gif)
+![gif2](Images/gif2.gif)
 
 ## Usage
 
