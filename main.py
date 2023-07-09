@@ -4,6 +4,7 @@ from constants import BLACK3, SOUND_EFFECTS, ICON_SIZE
 from board import Board
 from game import Game
 from snake import Snake
+from button import Button
 from time import time
 from other import write_best_score
 from other import music_icon, best_score_icon, take_best_score
@@ -66,28 +67,6 @@ BUTTON_RESTART_IMG = pygame.image.load('Images/reset.png')
 BUTTON_EXIT_IMG = pygame.image.load('Images/exit.png')
 BUTTON_PLAT_IMG = pygame.image.load('Images/play.png')
 BUTTON_MENU_IMG = pygame.image.load('Images/menu.png')
-
-
-class Button():
-    def __init__(self, x, y, image):
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-
-    def draw(self, window):
-        # get mouse possition
-        poss = pygame.mouse.get_pos()
-        action = False
-
-        # check if mouse if over the button
-        if self.rect.collidepoint(poss):
-            if pygame.mouse.get_pressed()[0] == 1:
-                action = True
-
-        window.blit(self.image, (
-            self.rect.x, self.rect.y))
-
-        return action
 
 
 def main_menu():
